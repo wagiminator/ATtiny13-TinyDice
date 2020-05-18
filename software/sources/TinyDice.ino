@@ -22,7 +22,8 @@
 // Clockspeed 1.2 MHz internal.
 // Millis/Tone must be disabled as Timer 0 is used.
 //
-// 2020 by Stefan Wagner
+// 2020 by Stefan Wagner  (https://easyeda.com/wagiminator)
+// License: http://creativecommons.org/licenses/by-sa/3.0/
 
 
 volatile uint8_t pips = 0;        // current number of pips
