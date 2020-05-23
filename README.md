@@ -1,6 +1,8 @@
 # TinyDice - Electronic Dice based on ATtiny13a
 A tiny (35mm * 17mm) electronic dice powered by ATtiny13.
 
+Video: https://youtu.be/Zr3TuCeP4eM
+
 Project on EasyEDA: https://easyeda.com/wagiminator/attiny10-tinydice-smd
 
 ![IMG_20200119_121110_x.jpg](https://image.easyeda.com/pullimage/yJZfh7bcoRyBUmhUBTNTZzjE656mvHVbt9BbT4QU.jpeg)
