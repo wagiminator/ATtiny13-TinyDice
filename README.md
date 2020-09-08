@@ -1,5 +1,5 @@
 # TinyDice - Electronic Dice based on ATtiny13a
-A tiny (35mm * 17mm) electronic dice powered by ATtiny13.
+A tiny (35mm * 17mm) electronic dice powered by ATtiny13. Please use only red LEDs and a rechargable li-ion battery (LIR2032)!
 
 Video: https://youtu.be/Zr3TuCeP4eM
 
