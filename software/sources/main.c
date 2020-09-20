@@ -19,26 +19,31 @@
 // | LED3        LED4 |
 // +------------------+
 //
-// Controller:  ATtiny13
-// Core:        MicroCore (https://github.com/MCUdude/MicroCore)
-// Clockspeed:  1.2 MHz internal
-// BOD:         BOD 2.7V
-// Timing:      Micros disabled (timer0 is used)
+// Controller: ATtiny13
+// Clockspeed: 1.2 MHz internal.
 //
 // 2020 by Stefan Wagner  (https://easyeda.com/wagiminator)
 // License: http://creativecommons.org/licenses/by-sa/3.0/
 
 
+// libraries
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
+
+// global variables
 volatile uint8_t pips = 0;        // current number of pips
-uint8_t matrix[] = {0b00110001,   // 1
-                    0b00110100,   // 2
-                    0b00110011,   // 3
-                    0b00110110,   // 4
-                    0b00110111,   // 5
-                    0b00111110};  // 6 - for converting pips to pins
 
+// main function
+int main(void) {
+  // local variables
+  uint8_t matrix[] = {0b00110001,   // 1
+                      0b00110100,   // 2
+                      0b00110011,   // 3
+                      0b00110110,   // 4
+                      0b00110111,   // 5
+                      0b00111110};  // 6 - for converting pips to pins
 
-void setup() {
   // setup pins
   DDRB  = 0b00001111;             // PB0 - PB3 as output, PB4 input
   PORTB = 0b00110001;             // pull-up for PB4/5; LED7 on
@@ -48,19 +53,21 @@ void setup() {
   TCCR0B = 0b00000011;            // set prescaler to 64
   TIMSK0 = 0b00000010;            // enable timer overflow interrupt
   SREG  |= 0b10000000;            // enable global interrupts
-}
 
-void loop() {
-  while(PINB & 0b00010000);       // wait for button pressed
+  // main loop
+  while(1) {
+    while(PINB & 0b00010000);     // wait for button pressed
 
-  // rolling the dice:
-  for (uint8_t i = 0; i < 16; i++) {
-    delay(i << 4);                // increasing delay between pip-shows
-    PORTB = matrix[pips];         // show current number of pips
+    // rolling the dice:
+    for (uint8_t i = 0; i < 16; i++) {
+      uint8_t del = (i << 4);
+      while (del--) _delay_ms(1); // increasing delay between pip-shows
+      PORTB = matrix[pips];       // show current number of pips
+    }
+
+    while(~PINB & 0b00010000);    // wait for button released
+    _delay_ms(10);                // debounce
   }
-
-  while(~PINB & 0b00010000);      // wait for button released
-  delay(10);                      // debounce
 }
 
 // timer0 overflow interrupt
