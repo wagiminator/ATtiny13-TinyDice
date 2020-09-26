@@ -1,23 +1,25 @@
-# Name:     makefile
 # Project:  tinyDice
 # Author:   Stefan Wagner
 # Year:     2020
 # URL:      https://easyeda.com/wagiminator
+#           https://github.com/wagiminator
 #
 # type "make help" in the command line
 
 # Microcontroller Options
 DEVICE 	= attiny13
-CLOCK	= 1200000
+CLOCK	  = 1200000
 PROGRMR = usbasp
-HFUSE	= 0xfb
-LFUSE	= 0x2a
+HFUSE	  = 0xfb
+LFUSE	  = 0x2a
+
+# Objects
+OBJECTS = main.o
 
 # Commands
 AVRDUDE = avrdude -c $(PROGRMR) -p $(DEVICE)
-COMPILE = avr-gcc -Wall -Os -Iusbdrv -I. -mmcu=$(DEVICE) -DF_CPU=$(CLOCK) -DDEBUG_LEVEL=0
-OBJECTS = main.o
-CLEAN	= rm -f main.lst main.obj main.cof main.list main.map main.eep.hex *.o main.s
+COMPILE = avr-gcc -Wall -Os -mmcu=$(DEVICE) -DF_CPU=$(CLOCK) -DDEBUG_LEVEL=0
+CLEAN	  = rm -f main.lst main.obj main.cof main.list main.map main.eep.hex *.o main.s
 
 # Symbolic Targets
 all:	help

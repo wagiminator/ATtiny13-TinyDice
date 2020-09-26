@@ -1,4 +1,4 @@
-// tinyDice for ATtiny13A
+// tinyDice for ATtiny13a
 // 
 // A tiny electronic dice powered by ATtiny13. Timer0 is used to
 // constantly change the number of pips. Chance is created by the
@@ -37,12 +37,12 @@ volatile uint8_t pips = 0;        // current number of pips
 // main function
 int main(void) {
   // local variables
-  uint8_t matrix[] = {0b00110001,   // 1
-                      0b00110100,   // 2
-                      0b00110011,   // 3
-                      0b00110110,   // 4
-                      0b00110111,   // 5
-                      0b00111110};  // 6 - for converting pips to pins
+  uint8_t matrix[] = {0b00110001, // 1
+                      0b00110100, // 2
+                      0b00110011, // 3
+                      0b00110110, // 4
+                      0b00110111, // 5
+                      0b00111110};// 6 - for converting pips to pins
 
   // setup pins
   DDRB  = 0b00001111;             // PB0 - PB3 as output, PB4 input
