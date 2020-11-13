@@ -19,7 +19,7 @@
 // | LED3        LED4 |
 // +------------------+
 //
-// Controller: ATtiny13
+// Controller: ATtiny13A
 // Clockspeed: 1.2 MHz internal.
 //
 // 2020 by Stefan Wagner 
