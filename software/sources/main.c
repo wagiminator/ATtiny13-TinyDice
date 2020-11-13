@@ -1,6 +1,6 @@
-// tinyDice for ATtiny13a
+// tinyDice for ATtiny13A
 // 
-// A tiny electronic dice powered by ATtiny13. Timer0 is used to
+// A tiny electronic dice powered by ATtiny13A. Timer0 is used to
 // constantly change the number of pips. Chance is created by the
 // uncertainty of the moment the button is pressed by the user.
 //
@@ -30,6 +30,7 @@
 
 // libraries
 #include <avr/io.h>
+#include <avr/sleep.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
@@ -47,28 +48,36 @@ int main(void) {
                       0b00111110};// 6 - for converting pips to pins
 
   // setup pins
-  DDRB  = 0b00001111;             // PB0 - PB3 as output, PB4 input
-  PORTB = 0b00110001;             // pull-up for PB4/5; LED7 on
+  DDRB   = 0b00001111;            // PB0 - PB3 as output, PB4 input
+  PORTB  = 0b00110001;            // pull-up for PB4/5; LED7 on
 
   // setup timer/counter
   TCCR0A = 0b00000000;            // no output
   TCCR0B = 0b00000011;            // set prescaler to 64
   TIMSK0 = 0b00000010;            // enable timer overflow interrupt
+
+  // setup pin change interrupt
+  GIMSK  = 0b00100000;            // turn on pin change interrupts
+  PCMSK  = 0b00010000;            // pin change interrupt on button pin
   SREG  |= 0b10000000;            // enable global interrupts
+
+  // disable unused peripherals and set sleep mode to save power
+  ACSR   = 0b10000000;            // disable analog comperator
+  PRR    = 0b00000001;            // shut down ADC
+  set_sleep_mode(SLEEP_MODE_IDLE);// set sleep mode to IDLE
 
   // main loop
   while(1) {
-    while(PINB & 0b00010000);     // wait for button pressed
-
-    // rolling the dice:
-    for (uint8_t i = 0; i < 16; i++) {
-      uint8_t del = (i << 4);
-      while (del--) _delay_ms(1); // increasing delay between pip-shows
-      PORTB = matrix[pips];       // show current number of pips
+    sleep_mode();                         // go to sleep
+    if (~PINB & 0b00010000) {             // if button pressed:  
+      for (uint8_t i = 0; i < 16; i++) {  // roll the dice
+        uint8_t del = (i << 4);           // increasing delay between pip-shows
+        while (del--) _delay_ms(1);       // set the delay
+        PORTB = matrix[pips];             // show current number of pips
+      }
+      while(~PINB & 0b00010000);          // wait for button released
+      _delay_ms(10);                      // debounce
     }
-
-    while(~PINB & 0b00010000);    // wait for button released
-    _delay_ms(10);                // debounce
   }
 }
 
@@ -76,3 +85,6 @@ int main(void) {
 ISR (TIM0_OVF_vect) {
   if (++pips > 5) pips = 0;       // cycle number of pips on every timer overflow
 }
+
+// pin change interrupt service routine
+EMPTY_INTERRUPT (PCINT0_vect);    // nothing to be done here, just wake up from sleep
