@@ -1,9 +1,9 @@
-# TinyDice - Electronic Dice based on ATtiny13a
-A tiny (35mm * 17mm) electronic dice powered by ATtiny13. Please use only red LEDs and a rechargable li-ion battery (LIR2032)!
+# TinyDice - Electronic Dice based on ATtiny13A
 
-Video: https://youtu.be/Zr3TuCeP4eM
+A tiny (35mm * 17mm) electronic dice powered by ATtiny13A. Please use only red LEDs and a rechargable li-ion battery (LIR2032)!
 
-Project on EasyEDA: https://easyeda.com/wagiminator/attiny10-tinydice-smd
+- Project on EasyEDA: https://easyeda.com/wagiminator/attiny10-tinydice-smd
+- Project Video: https://youtu.be/Zr3TuCeP4eM
 
 ![IMG_20200119_121110_x.jpg](https://image.easyeda.com/pullimage/yJZfh7bcoRyBUmhUBTNTZzjE656mvHVbt9BbT4QU.jpeg)
 
