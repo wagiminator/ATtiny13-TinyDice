@@ -12,10 +12,10 @@ The wiring is pretty simple:
 
 ![wiring.png](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinyDice/master/documentation/TinyDice_wiring.png)
 
-The fact that the opposite pair of dots on a dice always appear together was used for the circuit diagram. This means that there is no need for Multi or Charlieplexing. However, the supply voltage must be at least twice as high as the forward voltage of the LEDs. Therefore only red LEDs and the rechargeable LIR2032 li-ion batteries should be used.
+The fact that the opposite pairs of dots on a dice always appear together was used for the circuit diagram. This means that there is no need for Multi or Charlieplexing. However, the supply voltage must be at least twice as high as the forward voltage of the LEDs. Therefore only red LEDs and the rechargeable LIR2032 li-ion batteries should be used.
 
 # Software
-Timer0 is used to constantly change the number of pips. Chance is created by the uncertainty of the moment the button is pressed by the user. As long as nothing else needs to be done, the ATtiny remains in IDLE and only wakes up when you press a button (pin change interrupt). Then it rolls the dice, in which a series of numbers are shown on the dice with increasing time interval. Finally, the last number shown remains and the ATtiny changes back to IDLE. The number of pips shown on the dice corresponds to the respective counter (variable pips), which is constantly changed by the timer overflow interrupt. A simple matrix is used to control the LEDs, with which the respective number is converted into the values for the PORTB register.
+Timer0 is used to constantly change the number of pips in the background. Chance is created by the uncertainty of the moment the button is pressed by the user, which brings the current number of pips to display. As long as nothing else needs to be done, the ATtiny remains in IDLE and only wakes up when you press a button (pin change interrupt). Then it rolls the dice, in which a series of numbers are shown on the dice with increasing time interval. Finally, the last number shown remains and the ATtiny changes back to IDLE. The number of pips shown on the dice corresponds to the respective variable pips, which is constantly changed by the timer overflow interrupt. A simple matrix is used to control the LEDs, with which the respective number is converted into the values for the PORTB register.
 
 ```c
 // libraries
