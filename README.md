@@ -15,6 +15,7 @@ The wiring is pretty simple:
 The fact that the opposite pairs of dots on a dice always appear together was used for the circuit diagram. This means that there is no need for Multi or Charlieplexing. However, the supply voltage must be at least twice as high as the forward voltage of the LEDs. Therefore only red LEDs and the rechargeable LIR2032 li-ion batteries should be used.
 
 # Software
+## Implementation
 Timer0 is used to constantly change the number of pips in the background. Chance is created by the uncertainty of the moment the button is pressed by the user, which brings the current number of pips to display. As long as nothing else needs to be done, the ATtiny remains in IDLE and only wakes up when you press a button (pin change interrupt). Then it rolls the dice, in which a series of numbers are shown on the dice with increasing time interval. Finally, the last number shown remains and the ATtiny changes back to IDLE. The number of pips shown on the dice corresponds to the respective variable pips, which is constantly changed by the timer overflow interrupt. A simple matrix is used to control the LEDs, with which the respective number is converted into the values for the PORTB register.
 
 ```c
@@ -80,10 +81,10 @@ ISR (TIM0_OVF_vect) {
 EMPTY_INTERRUPT (PCINT0_vect);    // nothing to be done here, just wake up from sleep
 ```
 
-# Compiling and Uploading
+## Compiling and Uploading
 Since there is no ICSP header on the board, you have to program the ATtiny either before soldering using an [SOP adapter](https://aliexpress.com/wholesale?SearchText=sop-8+150mil+adapter), or after soldering using an [EEPROM clip](https://aliexpress.com/wholesale?SearchText=sop8+eeprom+programming+clip). The [AVR Programmer Adapter](https://github.com/wagiminator/AVR-Programmer/tree/master/AVR_Programmer_Adapter) can help with this.
 
-## If using the Arduino IDE
+### If using the Arduino IDE
 - Make sure you have installed [MicroCore](https://github.com/MCUdude/MicroCore).
 - Go to **Tools -> Board -> MicroCore** and select **ATtiny13**.
 - Go to **Tools** and choose the following board options:
@@ -95,7 +96,7 @@ Since there is no ICSP header on the board, you have to program the ATtiny eithe
 - Go to **Tools -> Burn Bootloader** to burn the fuses.
 - Open TinyDice.ino and click **Upload**.
 
-## If using the precompiled hex-file
+### If using the precompiled hex-file
 - Make sure you have installed [avrdude](https://learn.adafruit.com/usbtinyisp/avrdude).
 - Connect your programmer to your PC and to the ATtiny.
 - Open a terminal.
@@ -105,7 +106,7 @@ Since there is no ICSP header on the board, you have to program the ATtiny eithe
   avrdude -c usbasp -p t13 -U lfuse:w:0x2a:m -U hfuse:w:0xfb:m -U flash:w:tinydice.hex
   ```
 
-## If using the makefile (Linux/Mac)
+### If using the makefile (Linux/Mac)
 - Make sure you have installed [avr-gcc toolchain and avrdude](http://maxembedded.com/2015/06/setting-up-avr-gcc-toolchain-on-linux-and-mac-os-x/).
 - Connect your programmer to your PC and to the ATtiny.
 - Open the makefile and change the programmer if you are not using usbasp.
