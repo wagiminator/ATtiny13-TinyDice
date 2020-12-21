@@ -95,7 +95,7 @@ Since there is no ICSP header on the board, you have to program the ATtiny eithe
 - Go to **Tools -> Burn Bootloader** to burn the fuses.
 - Open TinyDice.ino and click **Upload**.
 
-# If using the precompiled hex-file
+## If using the precompiled hex-file
 - Make sure you have installed [avrdude](https://learn.adafruit.com/usbtinyisp/avrdude).
 - Connect your programmer to your PC and to the ATtiny.
 - Open a terminal.
@@ -105,7 +105,7 @@ Since there is no ICSP header on the board, you have to program the ATtiny eithe
   avrdude -c usbasp -p t13 -U lfuse:w:0x2a:m -U hfuse:w:0xfb:m -U flash:w:tinydice.hex
   ```
 
-# If using the makefile (Linux/Mac)
+## If using the makefile (Linux/Mac)
 - Make sure you have installed [avr-gcc toolchain and avrdude](http://maxembedded.com/2015/06/setting-up-avr-gcc-toolchain-on-linux-and-mac-os-x/).
 - Connect your programmer to your PC and to the ATtiny.
 - Open the makefile and change the programmer if you are not using usbasp.
