@@ -18,18 +18,18 @@ The fact that the opposite pairs of dots on a dice always appear together was us
 Timer0 is used to constantly change the number of pips in the background. Chance is created by the uncertainty of the moment the button is pressed by the user, which brings the current number of pips to display. As long as nothing else needs to be done, the ATtiny remains in IDLE and only wakes up when you press a button (pin change interrupt). Then it rolls the dice, in which a series of numbers are shown on the dice with increasing time interval. Finally, the last number shown remains and the ATtiny changes back to IDLE. The number of pips shown on the dice corresponds to the respective variable pips, which is constantly changed by the timer overflow interrupt. A simple matrix is used to control the LEDs, with which the respective number is converted into the values for the PORTB register.
 
 ```c
-// libraries
-#include <avr/io.h>
-#include <avr/sleep.h>
-#include <avr/interrupt.h>
-#include <util/delay.h>
+// Libraries
+#include <avr/io.h>               // for GPIO
+#include <avr/sleep.h>            // for sleep mode
+#include <avr/interrupt.h>        // for interrupts
+#include <util/delay.h>           // for delays
 
-// global variables
+// Global variables
 volatile uint8_t pips = 0;        // current number of pips
 
-// main function
+// Main function
 int main(void) {
-  // local variables
+  // Local variables
   uint8_t matrix[] = {0b00110001, // 1
                       0b00110100, // 2
                       0b00110011, // 3
@@ -37,32 +37,32 @@ int main(void) {
                       0b00110111, // 5
                       0b00111110};// 6 - for converting pips to pins
 
-  // setup pins
+  // Setup pins
   DDRB   = 0b00001111;            // PB0 - PB3 as output, PB4 input
   PORTB  = 0b00110001;            // pull-up for PB4/5; LED7 on
 
-  // setup timer/counter
+  // Setup timer/counter
   TCCR0A = 0b00000000;            // no output
   TCCR0B = 0b00000011;            // set prescaler to 64
   TIMSK0 = 0b00000010;            // enable timer overflow interrupt
 
-  // setup pin change interrupt
+  // Setup pin change interrupt
   GIMSK  = 0b00100000;            // turn on pin change interrupts
   PCMSK  = 0b00010000;            // pin change interrupt on button pin
   SREG  |= 0b10000000;            // enable global interrupts
 
-  // disable unused peripherals and set sleep mode to save power
+  // Disable unused peripherals and set sleep mode to save power
   ACSR   = 0b10000000;            // disable analog comperator
   PRR    = 0b00000001;            // shut down ADC
   set_sleep_mode(SLEEP_MODE_IDLE);// set sleep mode to IDLE
 
-  // main loop
+  // Loop
   while(1) {
     sleep_mode();                         // go to sleep
-    if (~PINB & 0b00010000) {             // if button pressed:  
-      for (uint8_t i = 0; i < 16; i++) {  // roll the dice
+    if(~PINB & 0b00010000) {              // if button pressed:  
+      for(uint8_t i = 0; i < 16; i++) {   // roll the dice
         uint8_t del = (i << 4);           // increasing delay between pip-shows
-        while (del--) _delay_ms(1);       // set the delay
+        while(del--) _delay_ms(1);        // set the delay
         PORTB = matrix[pips];             // show current number of pips
       }
       while(~PINB & 0b00010000);          // wait for button released
@@ -71,13 +71,13 @@ int main(void) {
   }
 }
 
-// timer0 overflow interrupt service routine
-ISR (TIM0_OVF_vect) {
-  if (++pips > 5) pips = 0;       // cycle number of pips on every timer overflow
+// Timer0 overflow interrupt service routine
+ISR(TIM0_OVF_vect) {
+  if(++pips > 5) pips = 0;        // cycle number of pips on every timer overflow
 }
 
-// pin change interrupt service routine
-EMPTY_INTERRUPT (PCINT0_vect);    // nothing to be done here, just wake up from sleep
+// Pin change interrupt service routine
+EMPTY_INTERRUPT(PCINT0_vect);     // nothing to be done here, just wake up from sleep
 ```
 
 ## Compiling and Uploading
@@ -88,7 +88,7 @@ Since there is no ICSP header on the board, you have to program the ATtiny eithe
 - Go to **Tools -> Board -> MicroCore** and select **ATtiny13**.
 - Go to **Tools** and choose the following board options:
   - **Clock:**  1.2 MHz internal osc.
-  - **BOD:**    BOD 2.7V
+  - **BOD:**    BOD disabled
   - **Timing:** Micros disabled
 - Connect your programmer to your PC and to the ATtiny.
 - Go to **Tools -> Programmer** and select your ISP programmer (e.g. [USBasp](https://aliexpress.com/wholesale?SearchText=usbasp)).
@@ -102,7 +102,7 @@ Since there is no ICSP header on the board, you have to program the ATtiny eithe
 - Navigate to the folder with the hex-file.
 - Execute the following command (if necessary replace "usbasp" with the programmer you use):
   ```
-  avrdude -c usbasp -p t13 -U lfuse:w:0x2a:m -U hfuse:w:0xfb:m -U flash:w:tinydice.hex
+  avrdude -c usbasp -p t13 -U lfuse:w:0x2a:m -U hfuse:w:0xff:m -U flash:w:tinydice.hex
   ```
 
 ### If using the makefile (Linux/Mac)
@@ -110,7 +110,7 @@ Since there is no ICSP header on the board, you have to program the ATtiny eithe
 - Connect your programmer to your PC and to the ATtiny.
 - Open the makefile and change the programmer if you are not using usbasp.
 - Open a terminal.
-- Navigate to the folder with the makefile and main.c.
+- Navigate to the folder with the makefile and sketch.
 - Run "make install" to compile, burn the fuses and upload the firmware.
 
 # References, Links and Notes
