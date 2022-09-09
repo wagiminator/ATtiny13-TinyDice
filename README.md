@@ -4,7 +4,7 @@ TinyDice is a tiny (35mm * 17mm) electronic dice powered by ATtiny13A.
 - Project Video (YouTube): https://youtu.be/Zr3TuCeP4eM
 - Design Files (EasyEDA): https://easyeda.com/wagiminator/attiny10-tinydice-smd
 
-![pic2.jpg](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinyDice/master/documentation/TinyDice_pic2.jpg)
+![pic1.jpg](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinyDice/master/documentation/TinyDice_pic1.jpg)
 
 # Hardware
 The wiring is pretty simple:
@@ -116,7 +116,8 @@ Since there is no ICSP header on the board, you have to program the ATtiny eithe
 # References, Links and Notes
 1. [ATtiny13A Datasheet](http://ww1.microchip.com/downloads/en/DeviceDoc/doc8126.pdf)
 
-![pic1.jpg](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinyDice/master/documentation/TinyDice_pic1.jpg)
+![pic3.jpg](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinyDice/master/documentation/TinyDice_pic3.jpg)
+![pic4.jpg](https://raw.githubusercontent.com/wagiminator/ATtiny13-TinyDice/master/documentation/TinyDice_pic4.jpg)
 
 # License
 ![license.png](https://i.creativecommons.org/l/by-sa/3.0/88x31.png)
